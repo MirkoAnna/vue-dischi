@@ -1,7 +1,7 @@
 <template>
     <main>
         <div class="container">
-            <ListDiscs class="disc" v-for="(disc, index) in discsList"
+            <MyDisc class="disc" v-for="(disc, index) in filteredDiscs"
             :key="index"
             :disc="disc"
             />
@@ -13,24 +13,47 @@
 <script>
 
 const axios = require('axios');
-import ListDiscs from './partials/ListDiscs.vue'
+import MyDisc from './partials/MyDisc.vue'
 
 export default {
     name: 'MyMain',
+    components: {
+        MyDisc
+    },
+    props: {
+        'selectedGenres': String
+    },
     data() {
         return {
             discsList: [],
-        }
+            genres: []
+        };
     },
-    components: {
-        ListDiscs
+    computed: {
+        filteredDiscs() {
+            if(this.selectedGenres == '') {
+                return this.discsList;
+            } else {
+
+                return this.discsList.filter( disc => {
+
+                    return disc.genre == this.selectedGenres;
+                });
+            }
+        }
     },
     methods: {
         getListDiscs() {
             axios.get('https://flynn.boolean.careers/exercises/api/array/music')
             .then((response) => {
                 this.discsList = response.data.response;
-                console.log(response.data.response);
+                this.discsList.forEach(disc => {
+                    if (!this.genres.includes(disc.genre)) {
+                        this.genres.push(disc.genre);
+                    }
+                });
+
+                this.$emit('genresComplete', this.genres);
             })
             .catch(function (error) {
                 // handle error

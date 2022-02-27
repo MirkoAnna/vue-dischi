@@ -1,12 +1,13 @@
 <template>
   <div id="app">
 
-    <MyHeader />
+
+    <MyHeader @selectedGenreEvt="getSelectedGenres" :genresList="genresList"/>
 
     <div class="main-container">
 
-      <MyMain/> 
-      
+      <MyMain @genresComplete="getGenres" :selectedGenres="selectedGenres" /> 
+
     </div>
 
   </div>
@@ -20,9 +21,23 @@ export default {
   name: 'App',
   components: {
     MyHeader,
-    MyMain,
+    MyMain
+  },
+  data() {
+    return {
+      genresList: [],
+      selectedGenres: ''
+    }
+  },
+  methods: {
+    getGenres(genresList) {
+      this.genresList = genresList;
+    },
+    getSelectedGenres(selectedGenreEvt) {
+      this.selectedGenres = selectedGenreEvt;
+    }
   }
-}
+};
 </script>
 
 <style lang="scss">

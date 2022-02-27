@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    name: 'ListDiscs',
+    name: 'MyDisc',
     props: {
         "disc": Object
     }
